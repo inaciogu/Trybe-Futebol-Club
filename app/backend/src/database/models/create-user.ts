@@ -15,10 +15,14 @@ class User extends Model {
 }
 
 User.init({
-  id: { type: DataTypes.INTEGER, allowNull: false, primaryKey: true, autoIncrement: true },
+  id: DataTypes.INTEGER,
   username: DataTypes.STRING,
+  role: DataTypes.STRING,
+  email: DataTypes.STRING,
+  password: DataTypes.STRING,
 }, {
   // ... Outras configs
+  tableName: 'users',
   underscored: true,
   sequelize: db,
   // modelName: 'example',
