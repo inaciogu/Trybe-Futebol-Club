@@ -11,7 +11,8 @@ module.exports = {
       },
       clubName: {
         type: Sequelize.STRING,
-        allowNull: false
+        allowNull: false,
+        field: 'club_name'
       }
     });
     return Clubs;

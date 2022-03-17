@@ -17,11 +17,13 @@ module.exports = {
         references: {
           model: 'clubs',
           key: 'id'
-        }
+        },
+        field: 'home_team'
       },
       homeTeamGoals: {
         type: Sequelize.INTEGER,
-        allowNull: false
+        allowNull: false,
+        field: 'home_team_goals'
       },
       awayTeam: {
         type: Sequelize.INTEGER,
@@ -31,15 +33,18 @@ module.exports = {
         references: {
           model: 'clubs',
           key: 'id'
-        }
+        },
+        field: 'away_team'
       },
       awayTeamGoals: {
         type: Sequelize.INTEGER,
-        allowNull: false
+        allowNull: false,
+        field: 'away_team_goals'
       },
       inProgress: {
         type: Sequelize.TINYINT,
-        allowNull: false
+        allowNull: false,
+        field: 'in_progress'
       }
     });
     return Matchs;

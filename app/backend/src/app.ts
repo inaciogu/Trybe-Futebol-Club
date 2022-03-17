@@ -1,12 +1,15 @@
 import * as express from 'express';
+import UserController from './database/controllers/userController';
+import { validateLogin } from './database/middlewares/validateLogin';
 
 class App {
   public app: express.Express;
   // ...
 
   constructor() {
-    // ...
+    this.app = express();
     this.config();
+    this.app.post('/login', validateLogin, UserController.login);
     // ...
   }
 
@@ -19,12 +22,13 @@ class App {
     };
 
     this.app.use(accessControl);
+    this.app.use(express.json());
     // ...
   }
 
   // ...
   public start(PORT: string | number):void {
-    // ...
+    this.app.listen(PORT);
   }
 }
 
