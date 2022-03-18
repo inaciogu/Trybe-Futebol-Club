@@ -2,6 +2,7 @@ import * as express from 'express';
 import * as cors from 'cors';
 import UserController from './database/controllers/userController';
 import { validateLogin } from './database/middlewares/validateLogin';
+import validateJwt from './database/auth/validateJwt';
 
 class App {
   public app: express.Express;
@@ -12,6 +13,7 @@ class App {
     this.app.use(cors());
     this.config();
     this.app.post('/login', validateLogin, UserController.login);
+    this.app.get('/login/validate', validateJwt, UserController.checkRole);
     // ...
   }
 

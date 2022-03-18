@@ -4,7 +4,6 @@ import { readFileSync } from 'fs';
 import UserService from '../services/userService';
 
 const secret = readFileSync('jwt.evaluation.key', 'utf-8');
-console.log(secret);
 
 export default class UserController {
   static login = async (req: Request, res: Response) => {
@@ -14,4 +13,9 @@ export default class UserController {
     console.log({ user, token });
     res.status(200).json({ user, token });
   };
+
+  static checkRole = async (req: Request, res: Response) => {
+    const role = req.userRole;
+    res.status(200).json(role);
+  }
 }
