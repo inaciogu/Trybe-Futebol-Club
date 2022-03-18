@@ -1,4 +1,5 @@
 import * as express from 'express';
+import * as cors from 'cors';
 import UserController from './database/controllers/userController';
 import { validateLogin } from './database/middlewares/validateLogin';
 
@@ -8,6 +9,7 @@ class App {
 
   constructor() {
     this.app = express();
+    this.app.use(cors());
     this.config();
     this.app.post('/login', validateLogin, UserController.login);
     // ...
