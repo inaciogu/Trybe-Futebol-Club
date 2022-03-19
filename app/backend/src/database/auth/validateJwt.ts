@@ -1,7 +1,7 @@
-import { NextFunction, Request, Response } from "express";
+import { NextFunction, Request, Response } from 'express';
 import * as jwt from 'jsonwebtoken';
-import { readFileSync, rmSync } from "fs";
-import User from "../models/create-user";
+import { readFileSync } from 'fs';
+import User from '../models/create-user';
 
 const secret = readFileSync('jwt.evaluation.key', 'utf-8');
 
@@ -25,7 +25,6 @@ export default async (req: Request, res: Response, next: NextFunction) => {
     const { data } = jwt.verify(token, secret) as TokenPayload;
 
     const user = await User.findOne({ where: { email: data.email } });
-    console.log(user);
 
     if (!user) {
       return res.status(401).json({ error: 'User not found' });
@@ -34,8 +33,7 @@ export default async (req: Request, res: Response, next: NextFunction) => {
     req.userRole = user.role;
 
     next();
-
   } catch (error) {
     console.log(error);
   }
-}
+};

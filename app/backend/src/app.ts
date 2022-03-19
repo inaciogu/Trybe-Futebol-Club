@@ -1,7 +1,7 @@
 import * as express from 'express';
 import * as cors from 'cors';
 import UserController from './database/controllers/userController';
-import { validateLogin } from './database/middlewares/validateLogin';
+import { validateLogin, validateUser } from './database/middlewares/validateLogin';
 import validateJwt from './database/auth/validateJwt';
 
 class App {
@@ -12,7 +12,7 @@ class App {
     this.app = express();
     this.app.use(cors());
     this.config();
-    this.app.post('/login', validateLogin, UserController.login);
+    this.app.post('/login', validateLogin, validateUser, UserController.login);
     this.app.get('/login/validate', validateJwt, UserController.checkRole);
     // ...
   }

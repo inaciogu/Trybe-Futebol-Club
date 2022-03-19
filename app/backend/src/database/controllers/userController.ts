@@ -17,5 +17,5 @@ export default class UserController {
   static checkRole = async (req: Request, res: Response) => {
     const role = req.userRole;
     res.status(200).json(role);
-  }
+  };
 }

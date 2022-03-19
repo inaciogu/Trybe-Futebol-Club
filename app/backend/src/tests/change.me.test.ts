@@ -79,6 +79,36 @@ describe('Testes da rota de Login', () => {
         expect(chaiHttpResponse.body).to.deep.equal({ "message": "All fields must be filled" })
       })
     })
+
+    describe('Quando os dados não estão corretos', () => {
+      const mockedUser = {
+        id: 1,
+        username: 'joao123',
+        role: 'brabo',
+        email: 'joao@hotmail.com',
+        password: 'senha123'
+      }
+      const mockedReturn = null;
+
+      before(async () => {
+        sinon.stub(User, "findOne").resolves(mockedReturn);
+        chaiHttpResponse =  await chai.request(app)
+          .post('/login')
+          .send({ email: mockedUser.email, password: 'aaksdjhas3123' })
+      })
+
+      after(() => {
+        (User.findOne as sinon.SinonStub).restore();
+      })
+      
+      it('Retorna o status esperado', () => {
+        expect(chaiHttpResponse).to.have.status(401);
+      })
+
+      it('Retorna uma mensagem de erro', () => {
+        expect(chaiHttpResponse.body).to.be.deep.equal({ message: 'User does not exist' })
+      });
+    });
   })
 
   describe('Em caso de sucesso', () => {
