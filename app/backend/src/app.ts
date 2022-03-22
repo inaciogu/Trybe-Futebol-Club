@@ -4,6 +4,7 @@ import UserController from './database/controllers/userController';
 import { validateLogin, validateUser } from './database/middlewares/validateLogin';
 import validateJwt from './database/auth/validateJwt';
 import ClubController from './database/controllers/clubController';
+import MatchController from './database/controllers/matchController';
 
 class App {
   public app: express.Express;
@@ -17,6 +18,7 @@ class App {
     this.app.get('/login/validate', validateJwt);
     this.app.get('/clubs', ClubController.findClubs);
     this.app.get('/clubs/:id', ClubController.findClubById);
+    this.app.get('/matchs', MatchController.findMatchs);
     // ...
   }
 

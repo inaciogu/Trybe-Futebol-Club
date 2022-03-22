@@ -42,7 +42,7 @@ module.exports = {
         field: 'away_team_goals'
       },
       inProgress: {
-        type: Sequelize.TINYINT,
+        type: Sequelize.BOOLEAN,
         allowNull: false,
         field: 'in_progress'
       }

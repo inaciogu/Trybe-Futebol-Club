@@ -323,8 +323,8 @@ describe('Testes da rota "/matchs"', () => {
       }
     ]
 
-    before(async () => {
+    /* before(async () => {
       sinon.stub(Matchs, "findAll").resolves(mockedMatches as Matchs[]);
-    });
+    }); */
   });
 })
