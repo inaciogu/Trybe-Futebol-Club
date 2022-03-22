@@ -22,7 +22,7 @@ export default async (req: Request, res: Response, next: NextFunction) => {
   }
 
   try {
-    const { data } = jwt.verify(token, secret) as TokenPayload;
+    const { data } = await jwt.verify(token, secret) as TokenPayload;
 
     const user = await User.findOne({ where: { email: data.email } });
 
@@ -30,10 +30,10 @@ export default async (req: Request, res: Response, next: NextFunction) => {
       return res.status(401).json({ error: 'User not found' });
     }
 
-    req.userRole = user.role;
-
-    next();
+    return res.status(200).json(user.role);
   } catch (error) {
     console.log(error);
+    next();
   }
+  next();
 };

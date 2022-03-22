@@ -18,7 +18,7 @@ class Matchs extends Model {
 }
 
 Matchs.init({
-  id: DataTypes.INTEGER,
+  id: { type: DataTypes.INTEGER, primaryKey: true },
   homeTeam: DataTypes.INTEGER,
   homeTeamGoals: DataTypes.INTEGER,
   awayTeam: DataTypes.INTEGER,
@@ -33,10 +33,10 @@ Matchs.init({
   timestamps: false,
 });
 
-Clubs.belongsTo(Matchs, { foreignKey: 'home_team', as: 'teamA' });
-Clubs.belongsTo(Matchs, { foreignKey: 'away_team', as: 'teamB' });
+Clubs.hasMany(Matchs, { foreignKey: 'home_team', as: 'teamA' });
+Clubs.hasMany(Matchs, { foreignKey: 'away_team', as: 'teamB' });
 
-Matchs.hasMany(Clubs, { foreignKey: 'home_team', as: 'teamA' });
-Matchs.hasMany(Clubs, { foreignKey: 'away_team', as: 'teamB' });
+Matchs.belongsTo(Clubs, { foreignKey: 'home_team', as: 'teamA' });
+Matchs.belongsTo(Clubs, { foreignKey: 'away_team', as: 'teamB' });
 
 export default Matchs;

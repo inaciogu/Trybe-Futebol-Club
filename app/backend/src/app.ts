@@ -3,6 +3,7 @@ import * as cors from 'cors';
 import UserController from './database/controllers/userController';
 import { validateLogin, validateUser } from './database/middlewares/validateLogin';
 import validateJwt from './database/auth/validateJwt';
+import ClubController from './database/controllers/clubController';
 
 class App {
   public app: express.Express;
@@ -13,7 +14,9 @@ class App {
     this.app.use(cors());
     this.config();
     this.app.post('/login', validateLogin, validateUser, UserController.login);
-    this.app.get('/login/validate', validateJwt, UserController.checkRole);
+    this.app.get('/login/validate', validateJwt);
+    this.app.get('/clubs', ClubController.findClubs);
+    this.app.get('/clubs/:id', ClubController.findClubById);
     // ...
   }
 
