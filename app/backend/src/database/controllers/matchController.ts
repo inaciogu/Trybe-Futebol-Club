@@ -12,11 +12,4 @@ export default class MatchController {
     const response = await MatchService.findMatchs();
     return res.status(200).json(response);
   };
-
-  /*  static findMatchsByQuery = async (req: Request, res: Response) => {
-    const { inProgress } = req.query;
-
-    const response = await MatchService.findByQuery((inProgress === 'true'));
-    res.status(200).json(response);
-  }; */
 }
