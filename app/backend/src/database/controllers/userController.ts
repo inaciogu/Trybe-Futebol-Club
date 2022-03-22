@@ -7,10 +7,9 @@ const secret = readFileSync('jwt.evaluation.key', 'utf-8');
 
 export default class UserController {
   static login = async (req: Request, res: Response) => {
-    const { email, password } = req.body;
-    const user = await UserService.findUser(email, password);
+    const { email } = req.body;
+    const user = await UserService.findUser(email);
     const token = sign({ data: { email } }, secret);
-    console.log({ user, token });
     res.status(200).json({ user, token });
   };
 

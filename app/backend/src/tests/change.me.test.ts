@@ -105,7 +105,7 @@ describe('Testes da rota de Login', () => {
       })
 
       it('Retorna o status esperado', () => {
-        expect(chaiHttpResponse).to.have.status(401);
+        expect(chaiHttpResponse).to.have.status(404);
       })
 
       it('Retorna uma mensagem de erro', () => {
@@ -323,8 +323,64 @@ describe('Testes da rota "/matchs"', () => {
       }
     ]
 
-    /* before(async () => {
-      sinon.stub(Matchs, "findAll").resolves(mockedMatches as Matchs[]);
-    }); */
+    before(async () => {
+      sinon.stub(Matchs, "findAll").resolves(mockedMatches as any);
+      chaiHttpResponse = await chai.request(app)
+        .get('/matchs')
+    });
+
+    after(() => {
+      (Matchs.findAll as sinon.SinonStub).restore();
+    });
+
+    it('Retorna status 200', () => {
+      expect(chaiHttpResponse).to.have.status(200);
+    });
+
+    it('Retorna os jogos', () => {
+      expect(chaiHttpResponse.body).to.be.deep.equal(mockedMatches);
+    })
+  });
+
+  describe('Quando a requisição possui a query string "inProgress"', () => {
+    describe('Caso "inProgress" seja true', () => {
+      const mockedMatches = [
+        {
+          "id": 1,
+          "homeTeam": 16,
+          "homeTeamGoals": 1,
+          "awayTeam": 8,
+          "awayTeamGoals": 1,
+          "inProgress": true,
+          "homeClub": {
+            "clubName": "São Paulo"
+          },
+          "awayClub": {
+            "clubName": "Grêmio"
+          }
+        },
+        {
+          "id": 41,
+          "homeTeam": 16,
+          "homeTeamGoals": 2,
+          "awayTeam": 9,
+          "awayTeamGoals": 0,
+          "inProgress": true,
+          "homeClub": {
+            "clubName": "São Paulo"
+          },
+          "awayClub": {
+            "clubName": "Internacional"
+          }
+        }
+      ];
+
+      before(async () => {
+        sinon.stub(Matchs, "findAll").resolves(mockedMatches as any);
+        chaiHttpResponse = await chai.request(app)
+          .get('/matchs')
+          .query('inProgress')
+      });
+    });
   });
 })

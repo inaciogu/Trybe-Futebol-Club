@@ -1,4 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
+import * as bcrypt from 'bcryptjs';
 import User from '../models/create-user';
 
 interface LoginProps {
@@ -33,11 +34,16 @@ export const validateLogin = (req: Request, res: Response, next: NextFunction) =
 export const validateUser = async (req: Request, res: Response, next: NextFunction) => {
   const { email, password }: LoginProps = req.body;
 
-  const user = await User.findOne({ where: { email, password } });
-  console.log(user);
+  const user = await User.findOne({ where: { email } });
 
   if (!user) {
-    return res.status(401).json({ message: 'User does not exist' });
+    return res.status(404).json({ message: 'User does not exist' });
+  }
+
+  const checkPassword = bcrypt.compareSync(password, user.password);
+
+  if (!checkPassword) {
+    return res.status(401).json({ message: 'Wrong password' });
   }
 
   next();

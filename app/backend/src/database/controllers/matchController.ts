@@ -2,8 +2,21 @@ import { Request, Response } from 'express';
 import MatchService from '../services/matchService';
 
 export default class MatchController {
-  static findMatchs = async (_req: Request, res: Response) => {
+  static findMatchs = async (req: Request, res: Response) => {
+    const { inProgress } = req.query;
+    if (inProgress) {
+      const response = await MatchService.findByQuery((inProgress === 'true'));
+      return res.status(200).json(response);
+    }
+
     const response = await MatchService.findMatchs();
-    res.status(200).json(response);
+    return res.status(200).json(response);
   };
+
+  /*  static findMatchsByQuery = async (req: Request, res: Response) => {
+    const { inProgress } = req.query;
+
+    const response = await MatchService.findByQuery((inProgress === 'true'));
+    res.status(200).json(response);
+  }; */
 }

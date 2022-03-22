@@ -24,7 +24,7 @@ async function initSequelize() {
 
   const [validate] = await sequelize.query('SELECT 1+1 as result', { type: 'SELECT' });
 
-  if(validate?.result !== 2){
+  if(validate.result !== 2){
     throw new Error('Não foi possível conectar ao banco de dados')
   }
 
