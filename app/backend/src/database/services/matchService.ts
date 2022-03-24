@@ -30,8 +30,6 @@ export default class MatchService {
   static createMatch = async (match: NewMatch) => {
     const create = await Matchs.create(match);
 
-    const { homeTeam, awayTeam, homeTeamGoals, awayTeamGoals, inProgress } = match;
-
-    return { id: create.id, homeTeam, homeTeamGoals, awayTeam, awayTeamGoals, inProgress };
+    return create;
   };
 }

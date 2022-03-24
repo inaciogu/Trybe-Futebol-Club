@@ -14,9 +14,9 @@ export default class MatchController {
   };
 
   static createMatch = async (req: Request, res: Response) => {
-    const match: NewMatch = req.body;
-    const response = await MatchService.createMatch(match);
-    console.log(response.id);
+    const { homeTeam, awayTeam, homeTeamGoals, awayTeamGoals, inProgress }: NewMatch = req.body;
+    const response = await MatchService.createMatch({
+      homeTeam, awayTeam, homeTeamGoals, awayTeamGoals, inProgress });
     res.status(201).json(response);
   };
 }

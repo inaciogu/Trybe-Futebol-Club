@@ -37,8 +37,7 @@ export default async (req: CheckRequest, res: Response, next: NextFunction) => {
 
     req.userRole = user.role;
   } catch (error) {
-    console.log(error);
-    next();
+    return res.status(401).json({ error: 'Invalid Token' });
   }
   next();
 };

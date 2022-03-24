@@ -32,7 +32,7 @@ class App {
     this.app.get('/clubs', ClubController.findClubs);
     this.app.get('/clubs/:id', ClubController.findClubById);
     this.app.get('/matchs', MatchController.findMatchs);
-    this.app.post('/matchs', MatchController.createMatch);
+    this.app.post('/matchs', validateJwt, MatchController.createMatch);
     // ...
   }
 
