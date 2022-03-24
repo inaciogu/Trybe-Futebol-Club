@@ -5,6 +5,11 @@ import User from '../models/create-user';
 
 const secret = readFileSync('jwt.evaluation.key', 'utf-8');
 
+// Solução de colocar o opcional na propriedade foi baseada no código do Guilherme Gomes
+export interface CheckRequest extends Request {
+  userRole?: string;
+}
+
 interface TokenPayload {
   data: {
     id: number;
@@ -14,7 +19,7 @@ interface TokenPayload {
   }
 }
 
-export default async (req: Request, res: Response, next: NextFunction) => {
+export default async (req: CheckRequest, res: Response, next: NextFunction) => {
   const token = req.headers.authorization;
 
   if (!token) {
@@ -30,7 +35,7 @@ export default async (req: Request, res: Response, next: NextFunction) => {
       return res.status(401).json({ error: 'User not found' });
     }
 
-    return res.status(200).json(user.role);
+    req.userRole = user.role;
   } catch (error) {
     console.log(error);
     next();

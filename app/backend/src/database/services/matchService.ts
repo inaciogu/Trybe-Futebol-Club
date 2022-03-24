@@ -1,20 +1,13 @@
 import Clubs from '../models/clubs';
 import Matchs from '../models/matchs';
 
-/* interface MockedMatch {
-  id: number;
+export interface NewMatch {
   homeTeam: number;
   homeTeamGoals: number;
   awayTeam: number;
   awayTeamGoals: number;
   inProgress: boolean;
-  homeClub: {
-    clubName: string;
-  };
-  awayClub: {
-    clubName: string;
-  };
-} */
+}
 
 export default class MatchService {
   static findMatchs = async () => {
@@ -32,5 +25,13 @@ export default class MatchService {
         { model: Clubs, as: 'awayClub', attributes: ['clubName'] },
       ] });
     return matchs;
+  };
+
+  static createMatch = async (match: NewMatch) => {
+    const create = await Matchs.create(match);
+
+    const { homeTeam, awayTeam, homeTeamGoals, awayTeamGoals, inProgress } = match;
+
+    return { id: create.id, homeTeam, homeTeamGoals, awayTeam, awayTeamGoals, inProgress };
   };
 }

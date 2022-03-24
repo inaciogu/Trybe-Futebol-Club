@@ -291,7 +291,7 @@ describe('Testes da rota "/clubs/:id"', () => {
 });
 
 describe('Testes da rota "/matchs"', () => {
-  describe('Em caso de sucesso', () => {
+  describe('Em caso de sucesso ao procurar partidas', () => {
     const mockedMatches = [
       {
         "id": 1,
@@ -346,31 +346,31 @@ describe('Testes da rota "/matchs"', () => {
     describe('Caso "inProgress" seja true', () => {
       const mockedMatches = [
         {
-          "id": 1,
-          "homeTeam": 16,
-          "homeTeamGoals": 1,
-          "awayTeam": 8,
-          "awayTeamGoals": 1,
-          "inProgress": true,
-          "homeClub": {
-            "clubName": "São Paulo"
+          id: 1,
+          homeTeam: 16,
+          homeTeamGoals: 1,
+          awayTeam: 8,
+          awayTeamGoals: 1,
+          inProgress: true,
+          homeClub: {
+            clubName: "São Paulo"
           },
-          "awayClub": {
-            "clubName": "Grêmio"
+          awayClub: {
+            clubName: "Grêmio"
           }
         },
         {
-          "id": 41,
-          "homeTeam": 16,
-          "homeTeamGoals": 2,
-          "awayTeam": 9,
-          "awayTeamGoals": 0,
-          "inProgress": true,
-          "homeClub": {
-            "clubName": "São Paulo"
+          id: 41,
+          homeTeam: 16,
+          homeTeamGoals: 2,
+          awayTeam: 9,
+          awayTeamGoals: 0,
+          inProgress: true,
+          homeClub: {
+            clubName: "São Paulo"
           },
-          "awayClub": {
-            "clubName": "Internacional"
+          awayClub: {
+            clubName: "Internacional"
           }
         }
       ];
@@ -379,7 +379,51 @@ describe('Testes da rota "/matchs"', () => {
         sinon.stub(Matchs, "findAll").resolves(mockedMatches as any);
         chaiHttpResponse = await chai.request(app)
           .get('/matchs')
-          .query('inProgress')
+          .query({ inProgress: true })
+      });
+
+      after(() => {
+        (Matchs.findAll as sinon.SinonStub).restore();
+      });
+
+      it('Retorna apenas as partida em progresso', () => {
+        expect(chaiHttpResponse.body).to.be.deep.equal(mockedMatches);
+      })
+    });
+  });
+  describe('Testa a criação de novas partidas', () => {
+    describe('Em caso de sucesso', () => {
+      const mockedBody = {
+        "homeTeam": 16, // O valor deve ser o id do time
+        "awayTeam": 8, // O valor deve ser o id do time
+        "homeTeamGoals": 2,
+        "awayTeamGoals": 2,
+        "inProgress": true // a partida deve ser criada como em progresso
+      };
+      
+      const mockedReturn = {
+        id: 1,
+        homeTeam: 16,
+        homeTeamGoals: 2,
+        awayTeam: 8,
+        awayTeamGoals: 2,
+        inProgress: true,
+      };
+
+      before(async () => {
+        sinon.stub(Matchs, "findOne").resolves(mockedReturn as Matchs);
+        chaiHttpResponse = await chai.request(app)
+          .post('/matchs')
+          .set('Authorization', 'token')
+          .send(mockedBody)
+      });
+
+      after(() => {
+        (Matchs.findOne as sinon.SinonStub).restore();
+      });
+
+      it('Retorna a partida criada', () => {
+        expect(chaiHttpResponse.body).to.be.deep.equal(mockedReturn);
       });
     });
   });

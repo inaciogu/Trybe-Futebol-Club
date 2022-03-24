@@ -28,10 +28,11 @@ class App {
     this.app.use(accessControl);
     this.app.use(express.json());
     this.app.post('/login', validateLogin, validateUser, UserController.login);
-    this.app.get('/login/validate', validateJwt);
+    this.app.get('/login/validate', validateJwt, UserController.checkRole);
     this.app.get('/clubs', ClubController.findClubs);
     this.app.get('/clubs/:id', ClubController.findClubById);
     this.app.get('/matchs', MatchController.findMatchs);
+    this.app.post('/matchs', MatchController.createMatch);
     // ...
   }
 
