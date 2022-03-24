@@ -2,6 +2,7 @@ import * as sinon from 'sinon';
 import * as chai from 'chai';
 import chaiHttp = require('chai-http');
 import * as jwt from 'jsonwebtoken';
+import * as bcrypt from 'bcryptjs';
 
 import { app } from '../app';
 import User from '../database/models/create-user';
@@ -134,8 +135,9 @@ describe('Testes da rota de Login', () => {
     }
 
     before(async () => {
+      sinon.stub(bcrypt, "compareSync").resolves(true);
       sinon.stub(User, "findOne").resolves(mockedUser as User);
-      sinon.stub(jwt, "sign").resolves(mockedReturn.token);
+      sinon.stub(jwt, "sign").returns();
       chaiHttpResponse = await chai.request(app)
         .post('/login')
         .send({ email: mockedUser.email, password: mockedUser.password })
@@ -394,11 +396,11 @@ describe('Testes da rota "/matchs"', () => {
   describe('Testa a criação de novas partidas', () => {
     describe('Em caso de sucesso', () => {
       const mockedBody = {
-        "homeTeam": 16, // O valor deve ser o id do time
-        "awayTeam": 8, // O valor deve ser o id do time
-        "homeTeamGoals": 2,
-        "awayTeamGoals": 2,
-        "inProgress": true // a partida deve ser criada como em progresso
+        homeTeam: 16,
+        awayTeam: 8,
+        homeTeamGoals: 2,
+        awayTeamGoals: 2,
+        inProgress: true
       };
       
       const mockedReturn = {
@@ -411,7 +413,7 @@ describe('Testes da rota "/matchs"', () => {
       };
 
       before(async () => {
-        sinon.stub(Matchs, "findOne").resolves(mockedReturn as Matchs);
+        sinon.stub(Matchs, "create").resolves(mockedReturn as Matchs);
         chaiHttpResponse = await chai.request(app)
           .post('/matchs')
           .set('Authorization', 'token')
@@ -419,12 +421,40 @@ describe('Testes da rota "/matchs"', () => {
       });
 
       after(() => {
-        (Matchs.findOne as sinon.SinonStub).restore();
+        (Matchs.create as sinon.SinonStub).restore();
       });
 
       it('Retorna a partida criada', () => {
         expect(chaiHttpResponse.body).to.be.deep.equal(mockedReturn);
       });
     });
+  });
+
+  describe('Testa a alteração do "inProgress"', () => {
+    const mockedReturn = {
+      id: 1,
+      homeTeam: 16,
+      homeTeamGoals: 2,
+      awayTeam: 8,
+      awayTeamGoals: 2,
+      inProgress: true,
+    };
+
+    before(async () => {
+      sinon.stub(Matchs, "update").resolves();
+      sinon.stub(Matchs, "findOne").resolves(mockedReturn as Matchs);
+      chaiHttpResponse = await chai.request(app)
+        .patch('/matchs/:id/finish')
+        .set('Authorization', 'token')
+        .send({ inProgress: true })
+    });
+
+    after(() => {
+      (Matchs.findOne as sinon.SinonStub).restore();
+    });
+
+    it('Retorna a partida com "inProgress alterado"', () => {
+      expect(chaiHttpResponse.body).to.be.deep.equal(mockedReturn);
+    })
   });
 })

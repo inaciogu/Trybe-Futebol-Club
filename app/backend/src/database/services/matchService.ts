@@ -32,4 +32,11 @@ export default class MatchService {
 
     return create;
   };
+
+  static updateProgress = async (inProgress: boolean, id: string) => {
+    await Matchs.update({ inProgress }, { where: { id } });
+
+    const match = await Matchs.findOne({ where: { id } });
+    return match;
+  };
 }
