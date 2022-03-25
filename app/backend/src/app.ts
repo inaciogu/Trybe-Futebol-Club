@@ -5,6 +5,7 @@ import { validateLogin, validateUser } from './database/middlewares/validateLogi
 import validateJwt from './database/auth/validateJwt';
 import ClubController from './database/controllers/clubController';
 import MatchController from './database/controllers/matchController';
+import validateMatch from './database/middlewares/validateMatch';
 
 class App {
   public app: express.Express;
@@ -32,7 +33,7 @@ class App {
     this.app.get('/clubs', ClubController.findClubs);
     this.app.get('/clubs/:id', ClubController.findClubById);
     this.app.get('/matchs', MatchController.findMatchs);
-    this.app.post('/matchs', validateJwt, MatchController.createMatch);
+    this.app.post('/matchs', validateJwt, validateMatch, MatchController.createMatch);
     this.app.patch('/matchs/:id/finish', MatchController.updateMatch);
     // ...
   }
