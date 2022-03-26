@@ -293,6 +293,13 @@ describe('Testes da rota "/clubs/:id"', () => {
 });
 
 describe('Testes da rota "/matchs"', () => {
+  const mockedBody = {
+    homeTeam: 16,
+    awayTeam: 8,
+    homeTeamGoals: 2,
+    awayTeamGoals: 2,
+    inProgress: true
+  };
   describe('Em caso de sucesso ao procurar partidas', () => {
     const mockedMatches = [
       {
@@ -395,14 +402,6 @@ describe('Testes da rota "/matchs"', () => {
   });
   describe('Testa a criação de novas partidas', () => {
     describe('Em caso de sucesso', () => {
-      const mockedBody = {
-        homeTeam: 16,
-        awayTeam: 8,
-        homeTeamGoals: 2,
-        awayTeamGoals: 2,
-        inProgress: true
-      };
-
       const mockedReturn = {
         id: 1,
         homeTeam: 16,
@@ -430,14 +429,6 @@ describe('Testes da rota "/matchs"', () => {
     });
 
     describe('Caso sejam passados dois times iguais', () => {
-      const mockedBody = {
-        homeTeam: 16,
-        awayTeam: 16,
-        homeTeamGoals: 2,
-        awayTeamGoals: 2,
-        inProgress: true
-      };
-
       before(async () => {
         chaiHttpResponse = await chai.request(app)
           .post('/matchs')
@@ -451,6 +442,31 @@ describe('Testes da rota "/matchs"', () => {
 
       it('Retorna a mensagem de erro esperada', () => {
         expect(chaiHttpResponse.body).to.be.deep.equal({ message: 'It is not possible to create a match with two equal teams' });
+      });
+    });
+
+    describe('Caso seja passado um time que não existe', () => {
+      const mockWrongBody = {
+        homeTeam: 12222,
+        awayTeam: 8,
+        homeTeamGoals: 2,
+        awayTeamGoals: 2,
+        inProgress: true
+      }
+      before(async () => {
+        sinon.stub(Clubs, "findOne").resolves(null);
+        chaiHttpResponse = await chai.request(app)
+          .post('/matchs')
+          .set('Authorization', 'token')
+          .send(mockWrongBody)
+      });
+
+      after(() => {
+        (Clubs.findOne as sinon.SinonStub).restore();
+      });
+
+      it('Retorna status 401', () => {
+        expect(chaiHttpResponse).to.have.status(401);
       });
     });
   });
