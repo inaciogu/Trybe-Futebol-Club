@@ -10,7 +10,12 @@ const validateMatch = async (req: Request, res: Response, next: NextFunction) =>
     );
   }
 
-  /* const isValidTeam = await Clubs.findOne({  }) */
+  const isValidHomeTeam = await Clubs.findOne({ where: { id: homeTeam } });
+  const isValidAwayTeam = await Clubs.findOne({ where: { id: awayTeam } });
+
+  if (!isValidHomeTeam || !isValidAwayTeam) {
+    return res.status(401).json({ message: 'There is no team with such id!' });
+  }
 
   next();
 };
