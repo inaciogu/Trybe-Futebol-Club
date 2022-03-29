@@ -34,6 +34,7 @@ class App {
     this.app.get('/clubs/:id', ClubController.findClubById);
     this.app.get('/matchs', MatchController.findMatchs);
     this.app.post('/matchs', validateJwt, validateMatch, MatchController.createMatch);
+    this.app.patch('/matchs/:id', MatchController.updateGoals);
     this.app.patch('/matchs/:id/finish', MatchController.updateMatch);
     // ...
   }

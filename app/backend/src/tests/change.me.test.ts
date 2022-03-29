@@ -429,11 +429,18 @@ describe('Testes da rota "/matchs"', () => {
     });
 
     describe('Caso sejam passados dois times iguais', () => {
+      const mockedEqualTeams = {
+        homeTeam: 1,
+        homeTeamGoals: 2,
+        awayTeam: 1,
+        awayTeamGoals: 5,
+        inProgress: false
+      }
       before(async () => {
         chaiHttpResponse = await chai.request(app)
           .post('/matchs')
           .set('Authorization', 'token')
-          .send(mockedBody)
+          .send(mockedEqualTeams)
       });
 
       it('Retorna status 401', () => {
@@ -491,11 +498,43 @@ describe('Testes da rota "/matchs"', () => {
     });
 
     after(() => {
+      (Matchs.update as sinon.SinonStub).restore();
       (Matchs.findOne as sinon.SinonStub).restore();
     });
 
     it('Retorna a partida com "inProgress alterado"', () => {
       expect(chaiHttpResponse.body).to.be.deep.equal(mockedReturn);
     })
+  });
+  describe('Testa a edição dos resultados', () => {
+    const mockedReturn = {
+      "id": 48,
+      "homeTeam": 13,
+      "homeTeamGoals": 14,
+      "awayTeam": 2,
+      "awayTeamGoals": 16,
+      "inProgress": false
+    }
+    before(async () => {
+      sinon.stub(Matchs, "update").resolves();
+      sinon.stub(Matchs, "findOne").resolves(mockedReturn as Matchs);
+      chaiHttpResponse = await chai.request(app)
+        .patch('/matchs/:id')
+        .set('Authorization', 'token')
+        .send({ homeTeamGoals: 14, awayTeamGoals: 16 })
+    });
+
+    after(() => {
+      (Matchs.update as sinon.SinonStub).restore();
+      (Matchs.findOne as sinon.SinonStub).restore();
+    });
+
+    it('Retorna a partida alterada', () => {
+      expect(chaiHttpResponse.body).to.be.deep.equal(mockedReturn);
+    });
+
+    it('Retorna status 200', () => {
+      expect(chaiHttpResponse).to.have.status(200);
+    });
   });
 })

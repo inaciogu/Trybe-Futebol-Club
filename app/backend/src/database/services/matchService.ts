@@ -39,4 +39,12 @@ export default class MatchService {
     const match = await Matchs.findOne({ where: { id } });
     return match;
   };
+
+  static updateGoals = async (homeTeamGoals: number, awayTeamGoals: number, id: string) => {
+    await Matchs.update({ homeTeamGoals, awayTeamGoals }, { where: { id } });
+
+    const match = await Matchs.findOne({ where: { id } });
+
+    return match;
+  };
 }
