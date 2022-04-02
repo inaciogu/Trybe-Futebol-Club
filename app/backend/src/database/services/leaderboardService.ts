@@ -1,4 +1,4 @@
-import MatchService from './matchService';
+/* import MatchService from './matchService';
 
 interface ILeaderboard {
   name: string;
@@ -14,5 +14,6 @@ interface ILeaderboard {
 }
 
 export default class LeaderboardService {
-    
+
 }
+ */
