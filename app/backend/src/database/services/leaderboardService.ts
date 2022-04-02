@@ -14,25 +14,5 @@ interface ILeaderboard {
 }
 
 export default class LeaderboardService {
-  Time: string;
-
-  P: number;
-
-  J: number;
-
-  V: number;
-
-  E: number;
-
-  D: number;
-
-  GP: number;
-
-  GC: number;
-
-  SG: number;
-
-  Aproveitamento: number;
-
-  
+    
 }
