@@ -6,6 +6,7 @@ import validateJwt from './database/auth/validateJwt';
 import ClubController from './database/controllers/clubController';
 import MatchController from './database/controllers/matchController';
 import validateMatch from './database/middlewares/validateMatch';
+import LeaderboardController from './database/controllers/leaderboardController';
 
 class App {
   public app: express.Express;
@@ -36,6 +37,7 @@ class App {
     this.app.post('/matchs', validateJwt, validateMatch, MatchController.createMatch);
     this.app.patch('/matchs/:id', MatchController.updateGoals);
     this.app.patch('/matchs/:id/finish', MatchController.updateMatch);
+    this.app.get('/leaderboard', LeaderboardController.getRankings);
     // ...
   }
 
