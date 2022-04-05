@@ -1,32 +1,32 @@
 // import MatchService from './matchService';
 import Matchs from '../models/matchs';
 // import CalculateHomeStats from '../utils/teamStats';
-import HomeMatchs from '../interfaces/match';
 import Clubs from '../models/clubs';
 import ILeaderboard from '../interfaces/leaderboard';
 import CalculateHomeStats from '../utils/teamStats';
 import CalculateAwayStats from '../utils/awayTeamStats';
+import TeamMatchs from '../interfaces/match';
 
 // classe service também inspirada no código do Rodolfo Braga
 
 export default class LeaderboardService {
-  static getMatchs = async (): Promise<HomeMatchs[]> => {
+  static getMatchs = async (): Promise<TeamMatchs[]> => {
     const matchs = await Clubs.findAll({
       include:
         [{ model: Matchs, as: 'homeMatchs', where: { inProgress: false } }],
     });
-    return matchs as HomeMatchs[];
+    return matchs as TeamMatchs[];
   };
 
-  static getAwayMatchs = async (): Promise<HomeMatchs[]> => {
+  static getAwayMatchs = async (): Promise<TeamMatchs[]> => {
     const matchs = await Clubs.findAll({
       include:
         [{ model: Matchs, as: 'awayMatchs', where: { inProgress: false } }],
     });
-    return matchs as HomeMatchs[];
+    return matchs as TeamMatchs[];
   };
 
-  static buildLeaderboard = (homeTeamMatchs: HomeMatchs[], isAway?: boolean): ILeaderboard[] => {
+  static buildLeaderboard = (homeTeamMatchs: TeamMatchs[], isAway?: boolean): ILeaderboard[] => {
     const leaderboard = homeTeamMatchs.map(({ clubName, homeMatchs, awayMatchs }) => {
       const teamInfos = isAway ? new CalculateAwayStats(awayMatchs)
         : new CalculateHomeStats(homeMatchs);
