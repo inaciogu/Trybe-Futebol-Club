@@ -6,4 +6,9 @@ export default class LeaderboardController {
     const response = await LeaderboardService.getLeaderboard();
     res.status(200).json(response);
   };
+
+  static getAwayRankings = async (_req: Request, res: Response) => {
+    const response = await LeaderboardService.getAwayLeaderboard();
+    res.status(200).json(response);
+  };
 }

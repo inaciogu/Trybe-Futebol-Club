@@ -38,6 +38,7 @@ class App {
     this.app.patch('/matchs/:id', MatchController.updateGoals);
     this.app.patch('/matchs/:id/finish', MatchController.updateMatch);
     this.app.get('/leaderboard/home', LeaderboardController.getRankings);
+    this.app.get('/leaderboard/away', LeaderboardController.getAwayRankings);
     // ...
   }
 

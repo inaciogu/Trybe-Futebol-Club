@@ -1,7 +1,6 @@
 import Match from '../models/matchs';
 
-// Classe baseada no código do Rodolfo Braga
-export default class CalculateHomeStats {
+export default class CalculateAwayStats {
   constructor(public matchs: Match[]) {}
 
   public getTotalPoints(): number {
@@ -14,7 +13,7 @@ export default class CalculateHomeStats {
 
   public getTotalVictories(): number {
     return this.matchs?.reduce((acc, match) => {
-      if (match.homeTeamGoals > match.awayTeamGoals) {
+      if (match.awayTeamGoals > match.homeTeamGoals) {
         return acc + 1;
       }
       return acc;
@@ -32,7 +31,7 @@ export default class CalculateHomeStats {
 
   public getTotalLosses(): number {
     return this.matchs?.reduce((acc, match) => {
-      if (match.homeTeamGoals < match.awayTeamGoals) {
+      if (match.awayTeamGoals < match.homeTeamGoals) {
         return acc + 1;
       }
       return acc;
@@ -40,11 +39,11 @@ export default class CalculateHomeStats {
   }
 
   public getGoalsFavor(): number {
-    return this.matchs?.reduce((acc, match) => acc + match.homeTeamGoals, 0);
+    return this.matchs?.reduce((acc, match) => acc + match.awayTeamGoals, 0);
   }
 
   public getGoalsOwn(): number {
-    return this.matchs?.reduce((acc, match) => acc + match.awayTeamGoals, 0);
+    return this.matchs?.reduce((acc, match) => acc + match.homeTeamGoals, 0);
   }
 
   public getGoalsBalance(): number {
