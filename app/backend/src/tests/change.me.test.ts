@@ -11,6 +11,8 @@ import Clubs from '../database/models/clubs';
 import Matchs from '../database/models/matchs';
 
 import { Response } from 'superagent';
+import ILeaderboard from '../database/interfaces/leaderboard';
+import HomeMatchs from '../database/interfaces/match';
 
 chai.use(chaiHttp);
 
@@ -537,5 +539,48 @@ describe('Testes da rota "/matchs"', () => {
     it('Retorna status 200', () => {
       expect(chaiHttpResponse).to.have.status(200);
     });
+  });
+});
+
+describe('Testes da rota "/leaderboard/home"', () => {
+  const mockedReturn = [
+    {
+      "name": "Palmeiras",
+      "totalPoints": 13,
+      "totalGames": 5,
+      "totalVictories": 4,
+      "totalDraws": 1,
+      "totalLosses": 0,
+      "goalsFavor": 17,
+      "goalsOwn": 5,
+      "goalsBalance": 12,
+      "efficiency": 86.67
+    },
+    {
+      "name": "Corinthians",
+      "totalPoints": 12,
+      "totalGames": 5,
+      "totalVictories": 4,
+      "totalDraws": 0,
+      "totalLosses": 1,
+      "goalsFavor": 12,
+      "goalsOwn": 3,
+      "goalsBalance": 9,
+      "efficiency": 80
+    }
+  ]
+
+  before(async () => {
+    sinon.stub(Clubs, "findAll").resolves(mockedReturn as any);
+    chaiHttpResponse = await chai.request(app)
+      .get('/leaderboard/home');
+  });
+
+  after(() => {
+    (Clubs.findAll as sinon.SinonStub).restore();
+  });
+
+  it('Retorna status 200', () => {
+    expect(chaiHttpResponse.body).to.be.deep.equal(mockedReturn);
   });
 })

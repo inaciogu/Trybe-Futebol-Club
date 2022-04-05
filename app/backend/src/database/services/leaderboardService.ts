@@ -6,7 +6,7 @@ import Clubs from '../models/clubs';
 import ILeaderboard from '../interfaces/leaderboard';
 import CalculateHomeStats from '../utils/teamStats';
 
-// classe service também inspirada no código do Rodolgo Braga
+// classe service também inspirada no código do Rodolfo Braga
 
 export default class LeaderboardService {
   static getMatchs = async (): Promise<HomeMatchs[]> => {
