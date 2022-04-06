@@ -542,33 +542,78 @@ describe('Testes da rota "/matchs"', () => {
   });
 });
 
-describe('Testes da rota "/leaderboard/home"', () => {
+describe.only('Testes da rota "/leaderboard/home"', () => {
   const mockedReturn = [
     {
-      "name": "Palmeiras",
-      "totalPoints": 13,
-      "totalGames": 5,
-      "totalVictories": 4,
-      "totalDraws": 1,
-      "totalLosses": 0,
-      "goalsFavor": 17,
-      "goalsOwn": 5,
-      "goalsBalance": 12,
-      "efficiency": 86.67
+      id: 16, clubName: 'São Paulo', homeMatchs:
+        [
+          {
+            id: 1,
+            homeTeam: 16,
+            homeTeamGoals: 1,
+            awayTeam: 8,
+            awayTeamGoals: 1,
+            inProgress: false
+          },
+          {
+            id: 28,
+            homeTeam: 16,
+            homeTeamGoals: 3,
+            awayTeam: 7,
+            awayTeamGoals: 0,
+            inProgress: false
+          }
+        ]
     },
     {
-      "name": "Corinthians",
-      "totalPoints": 12,
-      "totalGames": 5,
-      "totalVictories": 4,
-      "totalDraws": 0,
-      "totalLosses": 1,
-      "goalsFavor": 12,
-      "goalsOwn": 3,
-      "goalsBalance": 9,
-      "efficiency": 80
+      id: 9, clubName: 'Internacional', homeMatchs:
+        [
+          {
+            id: 2,
+            homeTeam: 9,
+            homeTeamGoals: 1,
+            awayTeam: 14,
+            awayTeamGoals: 1,
+            inProgress: false
+          },
+          {
+            id: 29,
+            homeTeam: 9,
+            homeTeamGoals: 0,
+            awayTeam: 4,
+            awayTeamGoals: 4,
+            inProgress: false
+          }
+        ]
     }
-  ]
+  ];
+
+  const mockedResponse = [
+    {
+      name: 'São Paulo',
+      totalPoints: 4,
+      totalGames: 2,
+      totalVictories: 1,
+      totalDraws: 1,
+      totalLosses: 0,
+      goalsFavor: 4,
+      goalsOwn: 1,
+      goalsBalance: 3,
+      efficiency: 66.67
+    },
+    {
+      name: 'Internacional',
+      totalPoints: 1,
+      totalGames: 2,
+      totalVictories: 0,
+      totalDraws: 1,
+      totalLosses: 1,
+      goalsFavor: 1,
+      goalsOwn: 5,
+      goalsBalance: -4,
+      efficiency: 16.67
+    }
+  ];
 
   before(async () => {
     sinon.stub(Clubs, "findAll").resolves(mockedReturn as any);
@@ -581,6 +626,6 @@ describe('Testes da rota "/leaderboard/home"', () => {
   });
 
   it('Retorna status 200', () => {
-    expect(chaiHttpResponse.body).to.be.deep.equal(mockedReturn);
+    expect(chaiHttpResponse.body).to.be.deep.equal(mockedResponse);
   });
 })
