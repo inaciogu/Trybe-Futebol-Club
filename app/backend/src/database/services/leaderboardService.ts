@@ -23,6 +23,18 @@ export default class LeaderboardService {
       include:
         [{ model: Matchs, as: 'awayMatchs', where: { inProgress: false } }],
     });
+    console.log(matchs);
+    return matchs as TeamMatchs[];
+  };
+
+  static getGeneralMatchs = async (): Promise<TeamMatchs[]> => {
+    const matchs = await Clubs.findAll({
+      include:
+      [
+        { model: Matchs, as: 'homeMatchs', where: { inProgress: false } },
+        { model: Matchs, as: 'awayMatchs', where: { inProgress: false } },
+      ],
+    });
     return matchs as TeamMatchs[];
   };
 
@@ -32,15 +44,36 @@ export default class LeaderboardService {
         : new CalculateHomeStats(homeMatchs);
       return {
         name: clubName,
-        totalPoints: teamInfos.getTotalPoints(),
-        totalGames: teamInfos.getTotalGames(),
-        totalVictories: teamInfos.getTotalVictories(),
-        totalDraws: teamInfos.getTotalDraws(),
-        totalLosses: teamInfos.getTotalLosses(),
-        goalsFavor: teamInfos.getGoalsFavor(),
-        goalsOwn: teamInfos.getGoalsOwn(),
-        goalsBalance: teamInfos.getGoalsBalance(),
-        efficiency: teamInfos.getEfficiency(),
+        totalPoints: teamInfos.totalPoints(),
+        totalGames: teamInfos.totalGames(),
+        totalVictories: teamInfos.totalVictories(),
+        totalDraws: teamInfos.totalDraws(),
+        totalLosses: teamInfos.totalLosses(),
+        goalsFavor: teamInfos.goalsFavor(),
+        goalsOwn: teamInfos.goalsOwn(),
+        goalsBalance: teamInfos.goalsBalance(),
+        efficiency: teamInfos.efficiency(),
+      };
+    });
+    return leaderboard;
+  };
+
+  static buildGeneralLeaderboard = (generalMatchs: TeamMatchs[]): ILeaderboard[] => {
+    const leaderboard = generalMatchs.map(({ clubName, homeMatchs, awayMatchs }) => {
+      const homeStats = new CalculateHomeStats(homeMatchs);
+      const awayStats = new CalculateAwayStats(awayMatchs);
+      return {
+        name: clubName,
+        totalPoints: (homeStats.totalPoints() + awayStats.totalPoints()),
+        totalGames: (homeStats.totalGames() + awayStats.totalGames()),
+        totalVictories: (homeStats.totalVictories() + awayStats.totalVictories()),
+        totalDraws: (homeStats.totalDraws() + awayStats.totalDraws()),
+        totalLosses: (homeStats.totalLosses() + awayStats.totalLosses()),
+        goalsFavor: (homeStats.goalsFavor() + awayStats.goalsFavor()),
+        goalsOwn: (homeStats.goalsOwn() + awayStats.goalsOwn()),
+        goalsBalance: (homeStats.goalsBalance() + awayStats.goalsBalance()),
+        efficiency: Math.round((((awayStats.totalPoints() + homeStats.totalPoints())
+        / ((homeStats.totalGames() + awayStats.totalGames()) * 3)) * 100) * 100) / 100,
       };
     });
     return leaderboard;
@@ -63,5 +96,11 @@ export default class LeaderboardService {
     const awayMatchs = await this.getAwayMatchs();
     const leaderboard = this.buildLeaderboard(awayMatchs, true);
     return this.sortLeaderboard(leaderboard);
+  };
+
+  static getGeneralLeaderboard = async () => {
+    const generalMatchs = await this.getGeneralMatchs();
+    const generalLeaderboard = this.buildGeneralLeaderboard(generalMatchs);
+    return this.sortLeaderboard(generalLeaderboard);
   };
 }

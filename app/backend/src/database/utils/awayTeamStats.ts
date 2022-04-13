@@ -3,15 +3,15 @@ import Match from '../models/matchs';
 export default class CalculateAwayStats {
   constructor(public matchs: Match[]) {}
 
-  public getTotalPoints(): number {
-    return this.getTotalVictories() * 3 + this.getTotalDraws();
+  public totalPoints(): number {
+    return this.totalVictories() * 3 + this.totalDraws();
   }
 
-  public getTotalGames(): number {
+  public totalGames(): number {
     return this.matchs?.length;
   }
 
-  public getTotalVictories(): number {
+  public totalVictories(): number {
     return this.matchs?.reduce((acc, match) => {
       if (match.awayTeamGoals > match.homeTeamGoals) {
         return acc + 1;
@@ -20,7 +20,7 @@ export default class CalculateAwayStats {
     }, 0);
   }
 
-  public getTotalDraws(): number {
+  public totalDraws(): number {
     return this.matchs?.reduce((acc, match) => {
       if (match.homeTeamGoals === match.awayTeamGoals) {
         return acc + 1;
@@ -29,7 +29,7 @@ export default class CalculateAwayStats {
     }, 0);
   }
 
-  public getTotalLosses(): number {
+  public totalLosses(): number {
     return this.matchs?.reduce((acc, match) => {
       if (match.awayTeamGoals < match.homeTeamGoals) {
         return acc + 1;
@@ -38,20 +38,20 @@ export default class CalculateAwayStats {
     }, 0);
   }
 
-  public getGoalsFavor(): number {
+  public goalsFavor(): number {
     return this.matchs?.reduce((acc, match) => acc + match.awayTeamGoals, 0);
   }
 
-  public getGoalsOwn(): number {
+  public goalsOwn(): number {
     return this.matchs?.reduce((acc, match) => acc + match.homeTeamGoals, 0);
   }
 
-  public getGoalsBalance(): number {
-    return this.getGoalsFavor() - this.getGoalsOwn();
+  public goalsBalance(): number {
+    return this.goalsFavor() - this.goalsOwn();
   }
 
-  public getEfficiency(): number {
-    const efficiency = (this.getTotalPoints() / (this.getTotalGames() * 3)) * 100;
+  public efficiency(): number {
+    const efficiency = (this.totalPoints() / (this.totalGames() * 3)) * 100;
     return Number(efficiency.toFixed(2));
   }
 }

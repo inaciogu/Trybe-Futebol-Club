@@ -11,8 +11,6 @@ import Clubs from '../database/models/clubs';
 import Matchs from '../database/models/matchs';
 
 import { Response } from 'superagent';
-import ILeaderboard from '../database/interfaces/leaderboard';
-import HomeMatchs from '../database/interfaces/match';
 
 chai.use(chaiHttp);
 
