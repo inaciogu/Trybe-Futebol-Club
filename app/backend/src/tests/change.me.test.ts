@@ -540,7 +540,7 @@ describe('Testes da rota "/matchs"', () => {
   });
 });
 
-describe.only('Testes da rota "/leaderboard/home"', () => {
+describe('Testes da rota "/leaderboard/home"', () => {
   const mockedReturn = [
     {
       id: 16, clubName: 'São Paulo', homeMatchs:
@@ -624,6 +624,160 @@ describe.only('Testes da rota "/leaderboard/home"', () => {
   });
 
   it('Retorna status 200', () => {
+    expect(chaiHttpResponse).to.have.status(200);
+  });
+  it('Tem o retorno esperado', () => {
     expect(chaiHttpResponse.body).to.be.deep.equal(mockedResponse);
   });
 })
+
+describe('Testes da rota "/leaderboard/away"', () => {
+  const mockedReturn = [
+    {
+      id: 8, clubName: 'Grêmio', awayMatchs:
+        [
+          {
+            id: 1,
+            homeTeam: 16,
+            homeTeamGoals: 1,
+            awayTeam: 8,
+            awayTeamGoals: 1,
+            inProgress: false
+          },
+          {
+            id: 17,
+            homeTeam: 1,
+            homeTeamGoals: 2,
+            awayTeam: 8,
+            awayTeamGoals: 3,
+            inProgress: false
+          }
+        ]
+    },
+    {
+      id: 14, clubName: 'Santos', awayMatchs:
+        [
+          {
+            id: 2,
+            homeTeam: 9,
+            homeTeamGoals: 1,
+            awayTeam: 14,
+            awayTeamGoals: 1,
+            inProgress: false
+          },
+          {
+            id: 24,
+            homeTeam: 10,
+            homeTeamGoals: 2,
+            awayTeam: 14,
+            awayTeamGoals: 2,
+            inProgress: false
+          }
+        ]
+    }
+  ];
+
+  const mockedResponse = [
+    {
+      name: 'Grêmio',
+      totalPoints: 4,
+      totalGames: 2,
+      totalVictories: 1,
+      totalDraws: 1,
+      totalLosses: 0,
+      goalsFavor: 4,
+      goalsOwn: 3,
+      goalsBalance: 1,
+      efficiency: 66.67
+    },
+    {
+      name: 'Santos',
+      totalPoints: 2,
+      totalGames: 2,
+      totalVictories: 0,
+      totalDraws: 2,
+      totalLosses: 0,
+      goalsBalance: 0,
+      goalsFavor: 3,
+      goalsOwn: 3,
+      efficiency: 33.33
+    }
+  ];
+
+  before(async () => {
+    sinon.stub(Clubs, "findAll").resolves(mockedReturn as any);
+    chaiHttpResponse = await chai.request(app)
+      .get('/leaderboard/away');
+  });
+
+  after(() => {
+    (Clubs.findAll as sinon.SinonStub).restore();
+  });
+
+  it('Retorna status 200', () => {
+    expect(chaiHttpResponse).to.have.status(200);
+  });
+  it('Tem o retorno esperado', () => {
+    expect(chaiHttpResponse.body).to.be.deep.equal(mockedResponse);
+  });
+});
+
+describe('Testes da rota "/leaderboard"', () => {
+  const mockedReturn =
+    [
+      {
+        id: 16, clubName: 'São Paulo', homeMatchs:
+          [
+            {
+              id: 1,
+              homeTeam: 16,
+              homeTeamGoals: 1,
+              awayTeam: 8,
+              awayTeamGoals: 1,
+              inProgress: false
+            }
+          ],
+        awayMatchs:
+          [
+            {
+              id: 14,
+              homeTeam: 14,
+              homeTeamGoals: 2,
+              awayTeam: 16,
+              awayTeamGoals: 1,
+              inProgress: false
+            }
+          ]
+      }
+    ]
+
+  const mockedResponse =
+    [
+      {
+        name: 'São Paulo',
+        totalPoints: 1,
+        totalGames: 2,
+        totalVictories: 0,
+        totalDraws: 1,
+        totalLosses: 1,
+        goalsFavor: 2,
+        goalsOwn: 3,
+        goalsBalance: -1,
+        efficiency: 16.67
+      }
+    ]
+
+  before(async () => {
+    sinon.stub(Clubs, 'findAll').resolves(mockedReturn as any);
+    chaiHttpResponse = await chai.request(app)
+      .get('/leaderboard');
+  });
+
+  after(() => {
+    (Clubs.findAll as sinon.SinonStub).restore();
+  });
+
+  it('Tem o retorno esperado', () => {
+    expect(chaiHttpResponse.body).to.be.deep.equal(mockedResponse);
+  });
+});

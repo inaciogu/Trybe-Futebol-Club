@@ -23,7 +23,6 @@ export default class LeaderboardService {
       include:
         [{ model: Matchs, as: 'awayMatchs', where: { inProgress: false } }],
     });
-    console.log(matchs);
     return matchs as TeamMatchs[];
   };
 
