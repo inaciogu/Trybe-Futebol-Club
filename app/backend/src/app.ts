@@ -1,12 +1,9 @@
 import * as express from 'express';
 import * as cors from 'cors';
-import UserController from './database/controllers/userController';
-import { validateLogin, validateUser } from './database/middlewares/validateLogin';
-import validateJwt from './database/auth/validateJwt';
-import ClubController from './database/controllers/clubController';
-import MatchController from './database/controllers/matchController';
-import validateMatch from './database/middlewares/validateMatch';
-import LeaderboardController from './database/controllers/leaderboardController';
+import login from './database/routes/loginRoute';
+import clubs from './database/routes/clubsRoute';
+import matchs from './database/routes/matchRoutes';
+import leaderboard from './database/routes/leaderboardRoute';
 
 class App {
   public app: express.Express;
@@ -29,17 +26,10 @@ class App {
 
     this.app.use(accessControl);
     this.app.use(express.json());
-    this.app.post('/login', validateLogin, validateUser, UserController.login);
-    this.app.get('/login/validate', validateJwt, UserController.checkRole);
-    this.app.get('/clubs', ClubController.findClubs);
-    this.app.get('/clubs/:id', ClubController.findClubById);
-    this.app.get('/matchs', MatchController.findMatchs);
-    this.app.post('/matchs', validateJwt, validateMatch, MatchController.createMatch);
-    this.app.patch('/matchs/:id', MatchController.updateGoals);
-    this.app.patch('/matchs/:id/finish', MatchController.updateMatch);
-    this.app.get('/leaderboard/home', LeaderboardController.getRankings);
-    this.app.get('/leaderboard/away', LeaderboardController.getAwayRankings);
-    // ...
+    this.app.use('/login', login);
+    this.app.use('/clubs', clubs);
+    this.app.use('/matchs', matchs);
+    this.app.use('/leaderboard', leaderboard);
   }
 
   // ...
