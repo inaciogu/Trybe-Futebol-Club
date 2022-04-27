@@ -19,7 +19,7 @@ A aplicação foi feita usando o método TDD (Test Driven Development ou desenvo
 # Como rodar o projeto localmente:
 - Faça o clone do repositório na sua maquina.
 - Rode o comando "npm install" para instalar as dependências.
-- utilize o comando "npm run compose:up" para rodar o docker compose da aplicação e criar o back end, front end e banco de dados.
+- Entre no diretório "Frontend" e execute o comando "npm start" para iniciar o app.
 - Acesse o seu navegador no endereço localhost:3000.
 
 # Como acessar a aplicação online
