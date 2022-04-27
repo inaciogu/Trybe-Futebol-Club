@@ -18,7 +18,7 @@ A aplicação foi feita usando o método TDD (Test Driven Development ou desenvo
 
 # Testes de Integração
 
-![Testes](./test-coverage.png)
+![Testes](./coverage-tests.png)
 
 # Como rodar o projeto localmente:
   - Faça o clone do repositório na sua maquina (`git clone git@github.com:inaciogu/Trybe-Futebol-Club.git`).
