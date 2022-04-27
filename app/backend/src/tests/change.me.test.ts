@@ -9,14 +9,36 @@ import { app } from '../app';
 import User from '../database/models/create-user';
 import Clubs from '../database/models/clubs';
 import Matchs from '../database/models/matchs';
+import { UserWithoutPassword } from '../database/interfaces/user';
 
 import { Response } from 'superagent';
+
+interface UserReturn {
+  user: {
+  id: number;
+  email: string;
+  role: string;
+  username: string;
+  token: string;
+  },
+  token: string;
+}
 
 chai.use(chaiHttp);
 
 const { expect } = chai;
 
 let chaiHttpResponse: Response;
+
+const mockedUser = {
+  id: 1,
+  username: 'joao123',
+  role: 'brabo',
+  email: 'joao@hotmail.com',
+  password: 'senha123'
+}
+
+const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7ImVtYWlsIjoiYWRtaW5AYWRtaW4uY29tIn0sImlhdCI6MTY1MTA2Mzk5NH0.BqEz3_mGqU0YCFTH9z9FnRifs_cGs1iqxVb6xIS-0UM'
 
 describe('Testes da rota de Login', () => {
   describe('Em caso de erro', () => {
@@ -117,14 +139,6 @@ describe('Testes da rota de Login', () => {
   })
 
   describe('Em caso de sucesso', () => {
-    const mockedUser = {
-      id: 1,
-      username: 'joao123',
-      role: 'brabo',
-      email: 'joao@hotmail.com',
-      password: 'senha123'
-    }
-
     const mockedReturn = {
       user: {
         id: 1,
@@ -132,13 +146,13 @@ describe('Testes da rota de Login', () => {
         role: 'brabo',
         email: 'joao@hotmail.com',
       },
-      token: "123.456.789"
+      token: token
     }
 
     before(async () => {
       sinon.stub(bcrypt, "compareSync").resolves(true);
-      sinon.stub(User, "findOne").resolves(mockedUser as User);
-      sinon.stub(jwt, "sign").returns();
+      sinon.stub(User, "findOne").resolves(mockedReturn.user as any);
+      sinon.stub(jwt, "sign").returns(token as any);
       chaiHttpResponse = await chai.request(app)
         .post('/login')
         .send({ email: mockedUser.email, password: mockedUser.password })
@@ -152,6 +166,10 @@ describe('Testes da rota de Login', () => {
     it('Retorna o status esperado', () => {
       expect(chaiHttpResponse).to.have.status(200);
     });
+    
+    it ('Retorna as informações do usuário e o token gerado', () => {
+      expect(chaiHttpResponse.body).to.be.deep.equal(mockedReturn);
+    })
   })
 });
 
@@ -416,7 +434,7 @@ describe('Testes da rota "/matchs"', () => {
         sinon.stub(Matchs, "create").resolves(mockedReturn as Matchs);
         chaiHttpResponse = await chai.request(app)
           .post('/matchs')
-          .set('Authorization', 'token')
+          .set('Authorization', token)
           .send(mockedBody)
       });
 
@@ -440,7 +458,7 @@ describe('Testes da rota "/matchs"', () => {
       before(async () => {
         chaiHttpResponse = await chai.request(app)
           .post('/matchs')
-          .set('Authorization', 'token')
+          .set('Authorization', token)
           .send(mockedEqualTeams)
       });
 
@@ -465,7 +483,7 @@ describe('Testes da rota "/matchs"', () => {
         sinon.stub(Clubs, "findOne").resolves(null);
         chaiHttpResponse = await chai.request(app)
           .post('/matchs')
-          .set('Authorization', 'token')
+          .set('Authorization', token)
           .send(mockWrongBody)
       });
 
@@ -494,7 +512,7 @@ describe('Testes da rota "/matchs"', () => {
       sinon.stub(Matchs, "findOne").resolves(mockedReturn as Matchs);
       chaiHttpResponse = await chai.request(app)
         .patch('/matchs/:id/finish')
-        .set('Authorization', 'token')
+        .set('Authorization', token)
         .send({ inProgress: true })
     });
 
@@ -521,7 +539,7 @@ describe('Testes da rota "/matchs"', () => {
       sinon.stub(Matchs, "findOne").resolves(mockedReturn as Matchs);
       chaiHttpResponse = await chai.request(app)
         .patch('/matchs/:id')
-        .set('Authorization', 'token')
+        .set('Authorization', token)
         .send({ homeTeamGoals: 14, awayTeamGoals: 16 })
     });
 

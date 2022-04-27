@@ -36,8 +36,8 @@ export default async (req: CheckRequest, res: Response, next: NextFunction) => {
     }
 
     req.userRole = user.role;
-  } catch (error) {
-    console.log(error);
+  } catch (error: any) {
+    console.log(error.message);
   }
   next();
 };
