@@ -23,7 +23,7 @@ A aplicação foi feita usando o método TDD (Test Driven Development ou desenvo
 - Acesse o seu navegador no endereço localhost:3000.
 
 # Como acessar a aplicação online
-- acesse o link: [Trybe Futebol Club](http://ec2-15-228-73-111.sa-east-1.compute.amazonaws.com:3000/)
+- Acesse o link: [Trybe Futebol Club](http://ec2-15-228-73-111.sa-east-1.compute.amazonaws.com:3000/)
 
 # Exemplo da aplicação rodando na web:
 ![TFC foto](./front-example.png)
