@@ -17,7 +17,7 @@ A aplicação foi feita usando o método TDD (Test Driven Development ou desenvo
 - Typescript
 
 # Como rodar o projeto localmente:
-- Faça o clone do repositório na sua maquina.
+- Faça o clone do repositório na sua maquina (`git clone git@github.com:inaciogu/Trybe-Futebol-Club.git`).
 - Rode o comando `npm install` para instalar as dependências.
 - Entre no diretório "frontend" (`cd app/frontend`) e execute o comando `npm start` para iniciar o front end da aplicação.
 - Acesse o seu navegador no endereço localhost:3000.
