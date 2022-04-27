@@ -16,11 +16,22 @@ A aplicação foi feita usando o método TDD (Test Driven Development ou desenvo
 - AWS
 - Typescript
 
+# Testes de Integração
+
+![Testes](./test-coverage.png)
+
 # Como rodar o projeto localmente:
-- Faça o clone do repositório na sua maquina (`git clone git@github.com:inaciogu/Trybe-Futebol-Club.git`).
-- Rode o comando `npm install` para instalar as dependências.
-- Entre no diretório "frontend" (`cd app/frontend`) e execute o comando `npm start` para iniciar o front end da aplicação.
-- Acesse o seu navegador no endereço localhost:3000.
+  - Faça o clone do repositório na sua maquina (`git clone git@github.com:inaciogu/Trybe-Futebol-Club.git`).
+  - Rode o comando `npm install` para instalar as dependências.
+    ## Frontend:
+    - Entre no diretório "frontend" `cd app/frontend` e execute o comando `npm start` para iniciar o front end da aplicação.
+    - Acesse o seu navegador no endereço localhost:3000.
+
+    ## Backend:
+    - Mude o nome do arquivo ".env.example" para ".env" e preencha com as informações do seu usuario MySQL
+    - Case não tenha o MySql instalado, siga o [Tutorial](https://www.alura.com.br/artigos/mysql-do-download-e-instalacao-ate-sua-primeira-tabela?gclid=Cj0KCQjw06OTBhC_ARIsAAU1yOXB1KimL-aPJ6uv3yx6-rOoWZ5AGiEr4ewdQNHQNuy1IphJU_mO77kaAn3qEALw_wcB)
+    - Entre no diretório "backend" `cd app/backend` e execute o comando `npm start` para iniciar o back end da aplicação
+    - O backend será iniciado no endereço localhost:3001
 
 # Como acessar a aplicação online
 - Acesse o link: [Trybe Futebol Club](http://ec2-15-228-73-111.sa-east-1.compute.amazonaws.com:3000/)
