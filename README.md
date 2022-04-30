@@ -2,7 +2,7 @@
 
 
 # Sobre
-O projeto foi desenvolvido no ambiente de estudos da Trybe e teve como objetivo desenvolver uma API REST utilizando Node.js, express, sequelizeORM e JWT.
+O projeto foi desenvolvido no ambiente de estudos da Trybe e teve como objetivo desenvolver uma API REST de placares de partidas de futebol utilizando Node.js, express, sequelizeORM e JWT.
 A aplicação foi feita usando o método TDD (Test Driven Development ou desenvolvimento orientado a testes) juntamento com POO (programação orientada a objetos), ela está totalmente dockerizada, tanto no front end quanto no back end, pois é uma aplicação web full stack, onde o front end já havia sido desenvolvido pela Trybe inicialmente. Os testes de integração foram feitos utilizando mocha e chai, e a biblioteca sinon para realizar os mocks das funções e têm uma taxa de cobertura de cerca de 98%. Após finalizar o projeto eu também realizei o deploy dele utilizando a AWS (amazon web service) e o docker-compose para rodar a aplicação na maquina virtual.
 
 # Tecnologias utilizadas
